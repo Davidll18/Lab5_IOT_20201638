@@ -127,19 +127,43 @@
             android:inputType="number"
             android:hint="Calorías" />
 
-        <Button
-            android:id="@+id/buttonAddFood"
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Añadir Comida" />
+            android:orientation="horizontal"
+            android:layout_marginTop="16dp"
+            android:gravity="center">
+
+            <Button
+                android:id="@+id/buttonAddFood"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Añadir Comida" />
+
+            <Button
+                android:id="@+id/buttonViewCatalog"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Ver Catálogo" />
+        </LinearLayout>
 
         <!-- Resumen de calorías -->
         <TextView
             android:id="@+id/textViewCaloriesSummary"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Calorías consumidas: 0 / Recomendadas: 0"
+            android:text="Calorías consumidas: 0 / Recomendadas: 0 / Calorias faltantes: 0"
             android:layout_marginTop="16dp" />
+        <Button
+            android:id="@+id/btnConfigureMotivationAlerts"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Configurar Alertas de Motivación"
+            android:layout_marginTop="30dp"
+            android:drawableStart="@android:drawable/ic_popup_reminder"
+            android:padding="12dp"/>
 
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="16dp">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Configurar Alertas de Motivación"
+        android:textSize="24sp"
+        android:textStyle="bold"
+        android:gravity="center"
+        android:layout_marginBottom="24dp"/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Intervalo de notificaciones (minutos)"
+        android:textSize="16sp"
+        android:layout_marginBottom="8dp"/>
+
+    <EditText
+        android:id="@+id/editTextInterval"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:inputType="number"
+        android:hint="Ejemplo: 30"
+        android:layout_marginBottom="16dp"/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Mensaje de motivación"
+        android:textSize="16sp"
+        android:layout_marginBottom="8dp"/>
+
+    <EditText
+        android:id="@+id/editTextMessage"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Ejemplo: ¡Sigue así, vas muy bien!"
+        android:layout_marginBottom="24dp"/>
+
+    <Button
+        android:id="@+id/buttonSaveAlerts"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Guardar configuración"/>
+
+    <Switch
+        android:id="@+id/switchEnableAlerts"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Activar notificaciones"
+        android:layout_marginTop="16dp"/>
+
+</LinearLayout>

@@ -1,7 +1,13 @@
 package com.example.lab5_20201638;
 
+import android.annotation.SuppressLint;
+import android.app.AlarmManager;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
+import android.app.PendingIntent;
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
@@ -19,6 +25,7 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
@@ -42,11 +49,22 @@ public class MainActivity extends AppCompatActivity {
         spinnerActivityLevel = findViewById(R.id.spinner_activity_level);
         radioGroupGoal = findViewById(R.id.radioGroup_goal);
         textResult = findViewById(R.id.text_result);
+        Button buttonViewCatalog = findViewById(R.id.buttonViewCatalog);
+
 
         editTextFoodName = findViewById(R.id.editTextFoodName);
         editTextCalories = findViewById(R.id.editTextCalories);
         textViewCaloriesSummary = findViewById(R.id.textViewCaloriesSummary);
 
+
+        buttonViewCatalog.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Inicia la actividad Catalogo
+                Intent intent = new Intent(MainActivity.this, Catalogo.class);
+                startActivity(intent);
+            }
+        });
 
 
         Button btnCalculate = findViewById(R.id.btn_calculate);
@@ -65,8 +83,15 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        Button btnConfigureMotivationAlerts = findViewById(R.id.btnConfigureMotivationAlerts);
+        btnConfigureMotivationAlerts.setOnClickListener(v -> {
+            Intent intent = new Intent(MainActivity.this, MotivationAlertsActivity.class);
+            startActivity(intent);
+        });
 
         createNotificationChannel();
+        scheduleMealNotifications();
+
     }
 
     private void createNotificationChannel() {
@@ -120,7 +145,7 @@ public class MainActivity extends AppCompatActivity {
             totalConsumedCalories += calories;
         }
 
-        String summaryText = "Calorías consumidas: " + totalConsumedCalories + " / Recomendadas: " + recommendedCalories;
+        String summaryText = "Calorías consumidas: " + totalConsumedCalories + " / Recomendadas: " + recommendedCalories + "/Calorias faltanes: " +(recommendedCalories-totalConsumedCalories);
         textViewCaloriesSummary.setText(summaryText);
 
         if (totalConsumedCalories > recommendedCalories) {
@@ -185,4 +210,58 @@ public class MainActivity extends AppCompatActivity {
                 return 1.0;
         }
     }
+
+    private void scheduleMealNotifications() {
+        AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
+
+        // Programar notificaciones para cada comida
+        scheduleMealNotification(alarmManager, "Desayuno", 7, 0);
+        scheduleMealNotification(alarmManager, "Almuerzo", 13, 0);
+        scheduleMealNotification(alarmManager, "Cena", 20, 0);
+    }
+
+    private void scheduleMealNotification(AlarmManager alarmManager, String mealType, int hour, int minute) {
+        Intent intent = new Intent(this, MealNotificationReceiver.class);
+        intent.putExtra("meal_type", mealType);
+
+        int requestCode = getMealRequestCode(mealType);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(
+                this,
+                requestCode,
+                intent,
+                PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE
+        );
+
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(Calendar.HOUR_OF_DAY, hour);
+        calendar.set(Calendar.MINUTE, minute);
+        calendar.set(Calendar.SECOND, 0);
+
+        if (calendar.getTimeInMillis() <= System.currentTimeMillis()) {
+            calendar.add(Calendar.DAY_OF_YEAR, 1);
+        }
+
+        alarmManager.setRepeating(
+                AlarmManager.RTC_WAKEUP,
+                calendar.getTimeInMillis(),
+                AlarmManager.INTERVAL_DAY,
+                pendingIntent
+        );
+    }
+
+    private int getMealRequestCode(String mealType) {
+        switch (mealType.toLowerCase()) {
+            case "desayuno":
+                return 200;
+            case "almuerzo":
+                return 201;
+            case "cena":
+                return 202;
+            default:
+                return 203;
+        }
+    }
+
+
+
 }
